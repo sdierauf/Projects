@@ -2,8 +2,11 @@ Mega Project List
 ========
 
 ####Stefan's Projects fork
-##Going to try to do this all in javascript in order to get better
-##Starting in alphabetical order (probably a bad idea)
+####Going to try to do this all in javascript in order to get better
+####Starting in alphabetical order (probably a bad idea)
+####Currently working on: Classes
+####Completed:
+
 
 
 A list of practical projects that anyone can solve in any programming language (See [solutions](https://github.com/thekarangoel/Projects-Solutions)). These projects are divided in multiple categories, and each category has it's own folder.
