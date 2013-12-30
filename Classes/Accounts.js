@@ -1,8 +1,17 @@
+Object.prototype.getName = function() { 
+  var funcNameRegex = /function (.{1,})\(/;
+  var results = (funcNameRegex).exec((this).constructor.toString());
+  return (results && results.length > 1) ? results[1] : "";
+};
+
+
+
 function Account(name, balance) {
   this.name = name;
   this.balance = balance;
   this.print = function() {
-    console.log(this.name + " has " + this.balance  + " dollars.");
+    var roundedBalance = Math.ceil(this.balance * 100) / 100.0;
+    console.log(this.name + " has " + roundedBalance  + " dollars.");
   }
 }
 
@@ -49,6 +58,38 @@ function SavingsAccount(name, balance, interestRate) {
   }
 }
 
+function BusinessAccount(name, balance, interestRate) {
+  Account.call(this, name, balance);
+  this.mergedAccounts = [];
+  this.interestRate = interestRate;
+  this.withdraw = function() {
+    console.log("Need to merge a CheckingAccount with this account in order to withdraw!");
+  }
+  this.merge = function(otherAccount) {
+    if (otherAccount.balance > 0) {
+      if (otherAccount.getName() == "SavingsAccount") {
+        this.interestRate = (otherAccount.interestRate + this.interestRate) / 2.0;
+      }
+      if (otherAccount.getName() == "CheckingAccount") {
+        this.withdraw = otherAccount.withdraw;
+      }
+      this.mergedAccounts.push(otherAccount.name);
+      this.balance += otherAccount.balance;
+      otherAccount.balance = 0;
+      otherAccount.name = "This account has been merged with " + this.name;
+      var newname = "";
+      this.mergedAccounts.forEach(function(value) {
+      //  console.log(value);
+        newname += value + "'s, ";
+      });
+      this.name = newname + "Business Account";
+    } else {
+      console.log("Can't merge an account with negative balance!");
+    }
+   
+  }
+}
+
 var test = new CheckingAccount("stefan", 500);
 var savings = new SavingsAccount("Billy", 20, 0.06);
 
@@ -62,4 +103,19 @@ for (var i = 0; i < 10; i++) {
 }
 console.log(savings.yearsUntil(3000000));
 console.log(savings.byearsUntil(3000000));
+console.log(test.getName());
+console.log(savings.getName());
+
+var biz = new BusinessAccount("biz", 1000);
+biz.print();
+biz.withdraw();
+biz.merge(test);
+biz.print();
+console.log(biz.withdraw(1000));
+biz.print();
+console.log(biz.withdraw(1000));
+biz.merge(savings);
+biz.print();
+
+//console.log(test.prototype.toString.call);
 
